@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fabric · tus1 Training Cluster · TensorWave</title>
+<link rel="icon" href="assets/mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="TensorWave">
+    <svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 10H36C52 10 50 60 66 60H92V90H64C48 90 50 40 34 40H8Z" fill="#0de2f2"/></svg>
+    <span class="wordmark">TENSORWAVE</span>
+  </a>
+  <div class="topbar-right">
+    <button class="icon-btn" aria-label="Notifications"><i data-lucide="bell-dot"></i></button>
+    <div class="avatar">A</div>
+    <i data-lucide="chevron-down" class="chev"></i>
+  </div>
+</header>
+
+<main class="page">
+  <div class="crumbs"><a href="#">Clusters</a><i data-lucide="chevron-right"></i><span>tus1 Training Cluster</span></div>
+  <div class="page-head">
+    <div class="title-wrap">
+      <h1 id="cluster-name">tus1 Training Cluster</h1>
+      <span class="state">Running <span class="dot ok"></span></span>
+      <span class="meta" id="cluster-meta"></span>
+    </div>
+    <div class="head-actions">
+      <button class="btn"><i data-lucide="download"></i>Kubeconfig</button>
+      <button class="btn">Run Health Checks <i data-lucide="play" class="fill"></i></button>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <a href="#">Health</a>
+    <a href="#">Nodes</a>
+    <a href="#">Kubernetes</a>
+    <a href="#">Slurm</a>
+    <a href="#">Health Checks</a>
+    <a href="#" class="active">Fabric <span class="badge-new">New</span></a>
+  </nav>
+
+  <section class="fabric-head">
+    <div>
+      <h2>Fabric triage</h2>
+      <p class="muted">Turns pairwise <code>ib_write_bw</code> results into the most likely faulty NIC rail, leaf switch or spine uplink, and plans the next round of pair tests on idle nodes.</p>
+    </div>
+    <div class="controls">
+      <div class="select" id="rail-select-wrap">
+        <select id="rail-select" aria-label="Rails"></select><i data-lucide="chevron-down"></i>
+      </div>
+      <div class="stepper">
+        <button class="btn sq" id="prev-round" aria-label="Previous round"><i data-lucide="chevron-left"></i></button>
+        <div class="select"><select id="round-select" aria-label="Round"></select><i data-lucide="chevron-down"></i></div>
+        <button class="btn sq" id="next-round" aria-label="Next round"><i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <div id="loading" class="card loading"><div class="spinner"></div><span id="loading-text">Running round 1 of pair tests…</span></div>
+
+  <section class="stat-grid" id="stats"></section>
+
+  <section class="row">
+    <div class="card map-card">
+      <div class="card-head">
+        <div class="card-title"><span class="ico blue"><i data-lucide="network"></i></span>Fabric map</div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="map" id="map"></div>
+    </div>
+    <div class="card side-card">
+      <div class="side-tabs">
+        <button class="active" data-side="plan">Next round</button>
+        <button data-side="detail">Component</button>
+      </div>
+      <div id="side"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title"><span class="ico red"><i data-lucide="shield-alert"></i></span>Findings</div>
+      <div class="muted small" id="findings-meta"></div>
+    </div>
+    <div class="table-wrap"><table class="tw-table" id="findings"></table></div>
+  </section>
+
+  <section class="row two">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title"><span class="ico teal"><i data-lucide="chart-line"></i></span>Faults confirmed vs. pair tests run</div>
+        <div class="chart-legend"><span><i class="sw teal"></i>Planned pairs</span><span><i class="sw violet"></i>Random shakedown pairs</span></div>
+      </div>
+      <div class="chart" id="chart"></div>
+      <p class="muted small chart-note" id="chart-note"></p>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title"><span class="ico green"><i data-lucide="list-checks"></i></span>Pair tests <span class="muted" id="log-round"></span></div>
+        <div class="muted small">ib_write_bw, 8 rails in parallel</div>
+      </div>
+      <div class="table-wrap log-wrap"><table class="tw-table" id="log"></table></div>
+    </div>
+  </section>
+
+  <footer class="foot">Unofficial concept demo by Mohith Gajjela. Not affiliated with TensorWave. Synthetic data.</footer>
+</main>
+<div class="tooltip" id="tip"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
