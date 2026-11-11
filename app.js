@@ -116,7 +116,7 @@ function renderStats(R, RR) {
   <div class="card stat">
     <div class="card-title"><span class="ico amber"><i data-lucide="circle-help"></i></span>Still open</div>
     <div class="big c-amber">${open}<small>suspect${open === 1 ? '' : 's'} · ${R.watch.length} on watch</small></div>
-    <div class="sub">${maskedCount} component${maskedCount === 1 ? '' : 's'} masked behind confirmed faults${R.untestedNic ? ` · ${R.untestedNic} NIC rails untested (allocated to jobs)` : ' · every NIC rail tested'}.</div>
+    <div class="sub">${maskedCount} component${maskedCount === 1 ? '' : 's'} masked behind confirmed faults; ${R.untestedNic ? `${R.untestedNic} NIC rails untested (allocated to jobs)` : 'every NIC rail tested'}.</div>
   </div>`;
 }
 
@@ -271,7 +271,13 @@ function renderDetail(R, c) {
   const ys = p => H - pad - p * (H - 2 * pad);
   const pts = hist.map((p, k) => `${xs(k).toFixed(1)},${ys(p).toFixed(1)}`).join(' ');
   const list = R.inf.compObs[c].map(o => AD.obs[o]).sort((a, b) => a.round - b.round);
-  const dg = R.nObsComp[c] && st !== 'masked' ? diagnose(R, c) : null;
+  let dg = null;
+  if (R.nObsComp[c] && ['confirmed', 'suspect', 'watch'].includes(st)) dg = diagnose(R, c);
+  else if (st === 'cleared') {
+    const xs = R.inf.compObs[c].map(o => AD.obs[o].x).sort((a, b) => a - b);
+    const slowN = xs.filter(x => x < F.MODEL.slowThr).length;
+    dg = { dx: `${xs.length - slowN} of ${xs.length} tests clean (median ${gbps(xs[Math.floor(xs.length / 2)])} Gb/s)${slowN ? `; the ${slowN} slow one${slowN > 1 ? 's are' : ' is'} explained by other components or a transient dip` : ''}`, action: 'None; stays in rotation' };
+  }
   $('side').innerHTML = `
     <div class="detail-title">${esc(comp.name)}</div>
     <div><span class="pill"><span class="dot" style="background:${st === 'confirmed' ? 'var(--status-error)' : st === 'suspect' || st === 'watch' ? 'var(--status-warning)' : st === 'cleared' ? 'var(--brand-teal)' : 'var(--accent)'}"></span>${STATE_LABEL[st]}</span></div>

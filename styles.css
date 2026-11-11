@@ -117,7 +117,7 @@ h1 { font-size: 26px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
 .pod-grid { display: grid; grid-template-columns: 44px repeat(32, minmax(0, 1fr)) 8px minmax(0, 1fr) minmax(0, 1fr); gap: 3px 2px; align-items: center; }
 .pod-grid .lab { font-size: 10.5px; color: var(--muted-foreground); font-family: var(--font-mono); }
 .pod-grid .colhead { font-size: 9.5px; color: var(--muted-foreground); font-family: var(--font-mono); width: 0; overflow: visible; white-space: nowrap; height: 12px; }
-.pod-grid .colhead.sw2 { grid-column: span 2; width: auto; text-align: center; margin: 0 -8px; }
+.pod-grid .colhead.sw2 { grid-column: span 2; width: auto; display: flex; justify-content: flex-end; margin: 0; }
 .cell { aspect-ratio: 1 / 1.15; border-radius: 2px; background: #15191a; cursor: pointer; position: relative; }
 .cell.sw { border-radius: 3px; }
 .cell.st-cleared { background: rgba(13, 226, 242, .22); }
